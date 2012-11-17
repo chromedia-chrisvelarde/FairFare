@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>FareShare</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no"  />
     
@@ -55,7 +56,7 @@
             </div>
         </div>
     
-        <div data-role="content" id="searchPage">   
+        <div data-role="content" id="searchPage" >   
             
             <div class="min-width">
                 <form method="get" action="#" id="DestinationForm">
@@ -73,20 +74,25 @@
                             <option>05:00PM</option>
                         </select>
                         <div class="taright">
-                            <button id="search" type="reset">
+                            <button  id="search" type="reset">
                                 <span>Get Direction!</span>
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
-            
+            <!-- 
             <button data-role="button" onclick="serverRequest.saveTrip({test:'test'})">Save</button>
-            
+             -->
         </div>
         
-        <div data-role="content" id="mapPage" style="position: absolute; z-index: -1; padding: 0px; top: 75px; opacity: 0.1;">
-            <div id="map_canvas" style="width:320px; height:390px;"></div>
+        <div data-role="content" id="mapPage" style="position: absolute; z-index: -1; padding: 0px; top: 75px; opacity: 0;">
+            <div id="map_canvas" style="width:320px; height:340px;"></div>
+            
+            <div data-role="fieldcontain" class="ui-hide-label">
+                <div>Estimated Fare: <span id="estimatedFare"></span></div>
+                
+            </div>
         </div>  
         
           

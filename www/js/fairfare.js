@@ -1,7 +1,9 @@
 
 var tracker = {
         
-    serverUrl: 'http://192.168.1.213:8888/fairShare/index.php',
+    baseRate: 40,
+        
+    serverUrl: 'http://staging.healthcareabroad.com/fairShare/index.php',
         
     originMarker: null,
     
@@ -81,7 +83,7 @@ var tracker = {
     },
     
     renderDirections: function() {
-        $('#searchPage').fadeOut();
+        $('#searchPage').hide();
         $('#mapPage').show().css({zIndex: 1, opacity: 1});
         var start = document.getElementById('origin').value;
         var end = document.getElementById('destination').value;
@@ -93,12 +95,14 @@ var tracker = {
         tracker.directionsService.route(request, function(response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
             tracker.directionsDisplay.setDirections(response);
+            _totalDistance = 0;
             $(response.routes).each(function(){
                 // iterate each route
                $(this.legs).each(function(){
                    // iterate the legs
                    _leg = this;
-                   $.ajax({
+                   _totalDistance += _leg.distance.value;
+                   /**$.ajax({
                        url: tracker.serverUrl,
                        data: {
                            device_uuid: '1',
@@ -116,10 +120,16 @@ var tracker = {
                        success: function(){
                            
                        }
-                   });
+                   });**/
+                   
                }); 
-            });
+            }); // end routes loop
             
+            _est = ((_totalDistance / 300)*3.5) + tracker.baseRate;
+            _est = parseFloat(_est).toFixed(2);
+            
+            //$('#estimatedFare').val(_est);
+            $('#estimatedFare').html(_est);
           }
         });
     },
