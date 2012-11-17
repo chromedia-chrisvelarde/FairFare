@@ -81,7 +81,8 @@ var tracker = {
     },
     
     renderDirections: function() {
-        
+        $('#searchPage').fadeOut();
+        $('#mapPage').show().css({zIndex: 1, opacity: 1});
         var start = document.getElementById('origin').value;
         var end = document.getElementById('destination').value;
         var request = {
