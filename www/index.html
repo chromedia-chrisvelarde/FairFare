@@ -2,34 +2,101 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="format-detection" content="telephone=no"  />
+    
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1, minimum-scale=1" />
     <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
       #map_canvas { height: 100% }
     </style>
+    
+    <!-- 
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
+    <link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css" />
+     -->
+     
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvawEd7r9NLGrLIoKCDWRP0ZhoGfDs458&sensor=true">
+      src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o">
     </script>
+    
+    <!-- https://maps.googleapis.com/maps/api/js?key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o&sensor=false&libraries=places -->
+    <script type="text/javascript" src="cordova-2.2.0.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/fairfare.js"></script>
     <script type="text/javascript">
       function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 8,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
+          app.initialize();
+          
+          tracker.initLocation();
+          
+          
+          /* 
+          var autocomplete = new google.maps.places.Autocomplete(from);
+          
+          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+              infowindow.close();
+              marker.setVisible(false);
+              input.className = '';
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                // Inform the user that the place was not found and return.
+                input.className = 'notfound';
+                return;
+              }
+
+              // If the place has a geometry, then present it on a map.
+              if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+              } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);  // Why 17? Because it looks good.
+              }
+              var image = new google.maps.MarkerImage(
+                  place.icon,
+                  new google.maps.Size(71, 71),
+                  new google.maps.Point(0, 0),
+                  new google.maps.Point(17, 34),
+                  new google.maps.Size(35, 35));
+              marker.setIcon(image);
+              marker.setPosition(place.geometry.location);
+
+              var address = '';
+              if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+              }
+
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+              infowindow.open(map, marker);
+            }); */
+          
       }
     </script>
   </head>
   <body onload="initialize()">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-    
-        <script type="text/javascript" src="cordova-2.2.0.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
+  
+    <div data-role="page" id="home">
+        <div data-role="content">   
+            <p id=""></p>
+                <div data-role="fieldcontain" class="ui-hide-label">
+                    <label for="track_id">From:</label>
+                    <input type="text" name="from" id="from" placeholder=""/>
+                </div>
+                
+                <div data-role="fieldcontain" class="ui-hide-label">
+                    <label for="track_id">To:</label>
+                    <input type="text" name="destination" id="destination" placeholder=""/>
+                </div>
+            <button data-role="button" id="search">Search</button>
+            
+        </div>
+    </div>
+        <div id="map_canvas" style="width: 100%; height: 100%;"></div>
   </body>
 </html>
