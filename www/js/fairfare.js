@@ -186,4 +186,73 @@ var tracker = {
         _watchId = navigator.geolocation.watchPosition(tracker.callbacks.getCurrentPosition.success, tracker.callbacks.getCurrentPosition.error, tracker.commonLocationOptions);
     }
     
+};
+
+serverRequest = {
+	uri: '192.168.1.213:8888/fairShare?',
+	
+	saveTrip: function(params)
+	{
+		url = serverRequest.uri + 'saveTrip';
+
+		$.post(url, params, function(result){
+			alert(result);
+		}, 'json');
+	},
+	
+	getSameTrips: function(params)
+	{
+		url = serverRequest.uri + 'getSameTrips';
+		$.get(url, params, function(){
+			
+		}, 'json');
+	},
+	
+	getSameTrips: function(params)
+	{
+		url = serverRequest.uri + 'getFares';
+		$.get(url, params, function(){
+			
+		}, 'json');
+	}
+};
+
+var fareCalculator =
+{
+	flagDown: 40, 
+	flagDownDistance: 500, // meter
+	succeedingRate: 3.50, 
+	succeedingDistance: 300,
+	idleRate: 3.50, 
+	idleTime: (1000 * 60) * 2, // 2 minute
+
+	totalFare: this.flagDown,
+	
+	addSucceedingFare: function()
+	{
+		this.totalFare += this.succeedingRate;
+	},
+
+	addIdleFare: function()
+	{
+		this.totalFare += this.idleRate;
+	},
+	
+	getTotalFare: function()
+	{
+		return this.totalFare;
+	},
+	
+	computeDistanceFare: function(distance)
+	{
+		var fare = this.flagDown;
+		
+		if(distance > this.flagDownDistance) {
+			distance -= this.flagDownDistance;
+
+			fare += (Math.ceil(distance / this.succeedingDistance) * this.succeedingRate);
+		}
+		
+		return fare;
+	}
 }
