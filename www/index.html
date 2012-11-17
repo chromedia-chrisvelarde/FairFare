@@ -33,6 +33,10 @@
       function initialize() {
           app.initialize();
           tracker.initLocation();
+          /* document.getElementById('search').click(function(){
+              tracker.renderDirections()
+          }); */
+          $('#search').click(tracker.renderDirections);
       }
     </script>
   </head>
