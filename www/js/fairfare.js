@@ -1,6 +1,8 @@
 
 var tracker = {
         
+    serverUrl: 'http://192.168.1.213:8888/fairShare/index.php',
+        
     originMarker: null,
     
     destinationMarker: null,
@@ -90,6 +92,33 @@ var tracker = {
         tracker.directionsService.route(request, function(response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
             tracker.directionsDisplay.setDirections(response);
+            $(response.routes).each(function(){
+                // iterate each route
+               $(this.legs).each(function(){
+                   // iterate the legs
+                   _leg = this;
+                   $.ajax({
+                       url: tracker.serverUrl,
+                       data: {
+                           device_uuid: '1',
+                           distance: _leg.distance.value,
+                           origin: _leg.start_address,
+                           origin_latitude: _leg.start_location.lat(),
+                           origin_longitude: _leg.start_location.lng(),
+                           destination: _leg.end_address,
+                           destination_latitude: _leg.end_location.lat(),
+                           destination_longitude: _leg.end_location.lng(),
+                           fare: 0
+                       },
+                       type: 'post',
+                       dataType: 'json',
+                       success: function(){
+                           
+                       }
+                   });
+               }); 
+            });
+            
           }
         });
     },
