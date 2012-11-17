@@ -189,9 +189,10 @@ serverRequest = {
 
 var fareCalculator =
 {
-	flagDown: 400, 
+	flagDown: 40, 
 	flagDownDistance: 500, // meter
 	succeedingRate: 3.50, 
+	succeedingDistance: 300,
 	idleRate: 3.50, 
 	idleTime: (1000 * 60) * 2, // 2 minute
 
@@ -210,5 +211,18 @@ var fareCalculator =
 	getTotalFare: function()
 	{
 		return this.totalFare;
+	},
+	
+	computeDistanceFare: function(distance)
+	{
+		var fare = this.flagDown;
+		
+		if(distance > this.flagDownDistance) {
+			distance -= this.flagDownDistance;
+
+			fare += (Math.ceil(distance / this.succeedingDistance) * this.succeedingRate);
+		}
+		
+		return fare;
 	}
 }
