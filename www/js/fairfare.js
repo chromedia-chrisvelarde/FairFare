@@ -1,6 +1,10 @@
 
 var tracker = {
         
+    originMarker: null,
+    
+    destinationMarker: null,
+        
     map: {},
         
     currentPosition: {},
@@ -20,9 +24,11 @@ var tracker = {
                 // set bounds
                 tracker.defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(tracker.currentPosition.coords.latitude, tracker.currentPosition.coords.longitude));
                 
+                gPosition = new google.maps.LatLng(tracker.currentPosition.coords.latitude, tracker.currentPosition.coords.longitude);
+                
                 tracker.initMapWidgets()
-                    .buildMap(tracker.currentPosition)
-                    .pinLocation(tracker.currentPosition);
+                    .buildMap(gPosition)
+                    .pinOrigin(gPosition);
             }, // end getCurrentPosition.success callback
             
             error: function(error) {
@@ -41,11 +47,10 @@ var tracker = {
     },
     
     buildMap: function(position) {
-        position = position ? position : tracker.currentPosition;
         
         var mapOptions = {
-                'center': new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-                zoom: 16,
+                'center': position,
+                zoom: 14,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
               };
         
@@ -54,12 +59,26 @@ var tracker = {
         return this;
     },
     
-    pinLocation: function(location){
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(location.coords.latitude, location.coords.longitude),
+    pinOrigin: function(position){
+        tracker.originMarker = tracker._changeMarker(tracker.originMarker, position);
+    },
+    
+    pinDestination: function(position) {
+        tracker.destinationMarker = tracker._changeMarker(tracker.destinationMarker, position);
+    },
+    
+    _changeMarker: function(marker, position) {
+        if (marker) {
+            marker.setMap(null);
+        }
+        
+        marker = new google.maps.Marker({
+            'position': position,
             map: tracker.map,
             title:"You are here!"
         });
+        
+        return marker;
     },
     
     initLocation: function() {
@@ -71,9 +90,37 @@ var tracker = {
     },
     
     initMapWidgets: function() {
-        var input = document.getElementById('from');
-        var searchBox = new google.maps.places.SearchBox(input, {bounds: tracker.defaultBounds});
+        var inputFrom = new google.maps.places.Autocomplete(document.getElementById('origin'), {bounds: tracker.defaultBounds});
+        var inputTo = new google.maps.places.Autocomplete(document.getElementById('destination'), {bounds: tracker.defaultBounds});
         
+        // bind listener for origin
+        google.maps.event.addListener(inputFrom, 'place_changed', function() {
+            var place = inputFrom.getPlace();
+            if (!place.geometry) {
+              return;
+            }
+            if (place.geometry.viewport) {
+              //tracker.map.fitBounds(place.geometry.viewport);
+            } else {
+              tracker.map.setCenter(place.geometry.location);
+            }
+            tracker.pinOrigin(place.geometry.location);
+          });
+        
+        // bind listener for destination
+        google.maps.event.addListener(inputTo, 'place_changed', function() {
+            var place = inputTo.getPlace();
+            if (!place.geometry) {
+              return;
+            }
+            if (place.geometry.viewport) {
+              //tracker.map.fitBounds(place.geometry.viewport);
+            } else {
+              tracker.map.setCenter(place.geometry.location);
+            }
+            tracker.pinDestination(place.geometry.location)
+          });
+//        
         return this;
     },
     
