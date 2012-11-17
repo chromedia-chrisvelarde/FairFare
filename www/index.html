@@ -33,6 +33,10 @@
       function initialize() {
           app.initialize();
           tracker.initLocation();
+          /* document.getElementById('search').click(function(){
+              tracker.renderDirections()
+          }); */
+          $('#search').click(tracker.renderDirections);
       }
     </script>
   </head>
@@ -43,7 +47,7 @@
             <p id=""></p>
                 <div data-role="fieldcontain" class="ui-hide-label">
                     <label for="track_id">From:</label>
-                    <input type="text" name="from" id="from" placeholder=""/>
+                    <input type="text" name="from" id="origin" placeholder=""/>
                 </div>
                 
                 <div data-role="fieldcontain" class="ui-hide-label">

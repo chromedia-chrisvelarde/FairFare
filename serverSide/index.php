@@ -1,6 +1,5 @@
-<?php 
+<?php
 
-require_once('dbConnect.php');
 
 $action = isset($_GET['action']);
 
