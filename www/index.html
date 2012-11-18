@@ -11,7 +11,7 @@
       body { height: 100%; margin: 0; padding: 0 }
       #map_canvas { height: 100% }
     </style>
-    
+    <script type="text/javascript" src="cordova-2.2.0.js"></script>
     <!-- 
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
@@ -25,7 +25,7 @@
     <!-- https://maps.googleapis.com/maps/api/js?key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o&sensor=false&libraries=places -->
     <link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
             <link rel="stylesheet" href="css/style.css" />
-    <script type="text/javascript" src="cordova-2.2.0.js"></script>
+    
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
@@ -87,12 +87,13 @@
         </div>
         
         <div data-role="content" id="mapPage" style="position: absolute; z-index: -1; padding: 0px; top: 75px; opacity: 0;">
-            <div id="map_canvas" style="width:320px; height:340px;"></div>
-            
+            <div id="map_canvas" style="width:320px; height:390px;"></div>
+            <!-- 
             <div data-role="fieldcontain" class="ui-hide-label">
                 <div>Estimated Fare: <span id="estimatedFare"></span></div>
                 
             </div>
+             -->
         </div>  
         
           

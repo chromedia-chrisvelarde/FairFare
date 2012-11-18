@@ -96,12 +96,17 @@ var tracker = {
           if (status == google.maps.DirectionsStatus.OK) {
             tracker.directionsDisplay.setDirections(response);
             _totalDistance = 0;
+            _totalDuration = 0; 
+            _totalDurationTraffic = 0;
             $(response.routes).each(function(){
                 // iterate each route
                $(this.legs).each(function(){
                    // iterate the legs
                    _leg = this;
                    _totalDistance += _leg.distance.value;
+                   _totalDuration += _leg.duration.value;
+//                   if (_leg.duration_in_traffic)
+//                   _totalDurationTraffic += _leg.duration_in_traffic.value;
                    /**$.ajax({
                        url: tracker.serverUrl,
                        data: {
@@ -127,9 +132,12 @@ var tracker = {
             
             _est = ((_totalDistance / 300)*3.5) + tracker.baseRate;
             _est = parseFloat(_est).toFixed(2);
-            
+            _estTime = parseFloat(_totalDuration/60).toFixed(2);
+//            _estTimeTraffic = parseFloat(_totalDurationTraffic/60).toFixed(2);
+            _message = "Estimated fare: P"+_est + "\nDuration: "+_estTime +" minutes";
+            navigator.notification.alert(_message, function(){}, "FareShare");
             //$('#estimatedFare').val(_est);
-            $('#estimatedFare').html(_est);
+            //$('#estimatedFare').html(_est);
           }
         });
     },
