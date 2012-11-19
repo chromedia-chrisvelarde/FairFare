@@ -1,6 +1,8 @@
 
 var tracker = {
         
+    hasInitLocation: false,
+        
     baseRate: 40,
         
     serverUrl: 'http://staging.healthcareabroad.com/fairShare/index.php',
@@ -13,11 +15,13 @@ var tracker = {
         
     currentPosition: {},
     
+    currentGooglePosition: null,
+    
     defaultBounds : {},
         
     trackedPositions: [],
     
-    directionsService: new google.maps.DirectionsService(),
+    directionsService: null,
     
     directionsDisplay: null,
         
@@ -27,21 +31,28 @@ var tracker = {
     callbacks: {
         getCurrentPosition: {
             success: function(position) {
+                
+                if (tracker.hasInitLocation) {
+                    return;
+                }
+                
                 tracker.currentPosition = position;
                 
                 // set bounds
                 tracker.defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(tracker.currentPosition.coords.latitude, tracker.currentPosition.coords.longitude));
                 
-                gPosition = new google.maps.LatLng(tracker.currentPosition.coords.latitude, tracker.currentPosition.coords.longitude);
+                tracker.currentGooglePosition = new google.maps.LatLng(tracker.currentPosition.coords.latitude, tracker.currentPosition.coords.longitude);
+                
+                tracker.directionsService = new google.maps.DirectionsService();
                 
                 tracker.directionsDisplay = new google.maps.DirectionsRenderer();
                 
                 tracker.initMapWidgets()
-                    .buildMap(gPosition)
-                    //.pinOrigin(gPosition)
-                    ;
+                    //.buildMap(tracker.currentGooglePosition)
+                    //.pinOrigin(tracker.currentGooglePosition)
+                    ;                
                 
-                tracker.directionsDisplay.setMap(tracker.map);
+                tracker.hasInitLocation = true;
             }, // end getCurrentPosition.success callback
             
             error: function(error) {
@@ -83,8 +94,8 @@ var tracker = {
     },
     
     renderDirections: function() {
-        $('#searchPage').hide();
-        $('#mapPage').show().css({zIndex: 1, opacity: 1});
+//        $('#searchPage').hide();
+//        $('#mapPage').show().css({zIndex: 1, opacity: 1});
         var start = document.getElementById('origin').value;
         var end = document.getElementById('destination').value;
         var request = {

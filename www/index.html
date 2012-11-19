@@ -1,106 +1,85 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>FareShare</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no"  />
-    
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1, minimum-scale=1" />
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
-    </style>
-    <script type="text/javascript" src="cordova-2.2.0.js"></script>
-    <!-- 
-    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
-    <link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css" />
-     -->
-     
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o">
-    </script>
-    
-    <!-- https://maps.googleapis.com/maps/api/js?key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o&sensor=false&libraries=places -->
-    <link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
-            <link rel="stylesheet" href="css/style.css" />
-    
-    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/fairfare.js"></script>
-    <script type="text/javascript">
-    
-    	//document.addEventListener("deviceready", onDeviceReady, false);
-    
-      function initialize() {
-          app.initialize();
-          tracker.initLocation();
-          /* document.getElementById('search').click(function(){
-              tracker.renderDirections()
-          }); */
-          $('#search').click(tracker.renderDirections);
-      }
-    </script>
-  </head>
-  <body onload="initialize()">
-  
-    <div data-role="page" id="home">
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Fair Fare</title>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <div data-role="header" id="header">
-            <div class="right-bg">
-                <div id="logo">
-                    <a href="index.html"><img alt="logo" src="images/logo.png"/></a>
-                </div>
-            </div>
-        </div>
-    
-        <div data-role="content" id="searchPage" >   
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        
+        <link rel="stylesheet" href="css/default_theme.min.css" /> 
+        <link rel="stylesheet" href="css/jquery.mobile.structure-1.2.0.min.css" />
+        
+        <script src="js/jquery-1.8.2.min.js"></script>
+        <script src="js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/fairfare.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&key=AIzaSyC88y7qXTAskflSQOQajGq5M4QikWvSt6o"></script>
+        <script type="text/javascript">
+        
+            function initialize() {
+                app.initialize();
+            }
             
-            <div class="min-width">
-                <form method="get" action="#" id="DestinationForm">
-                    <div>Origin
-                        <input type="text" id="origin" placeholder="Search">
-                        <ul id="suggestions" data-role="listview" data-inset="true"></ul>Destination
-                        <input type="text" id="destination" placeholder="Search">
-                        <ul id="suggestions" data-role="listview" data-inset="true"></ul>Time
-                        <select>
-                            <option>NOW!</option>
-                            <option>01:00PM</option>
-                            <option>02:00PM</option>
-                            <option>03:00PM</option>
-                            <option>04:00PM</option>
-                            <option>05:00PM</option>
-                        </select>
-                        <div class="taright">
-                            <button  id="search" type="reset">
-                                <span>Get Direction!</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- 
-            <button data-role="button" onclick="serverRequest.saveTrip({test:'test'})">Save</button>
-             -->
-        </div>
-        
-        <div data-role="content" id="mapPage" style="position: absolute; z-index: -1; padding: 0px; top: 75px; opacity: 0;">
-            <div id="map_canvas" style="width:320px; height:390px;"></div>
-            <!-- 
-            <div data-role="fieldcontain" class="ui-hide-label">
-                <div>Estimated Fare: <span id="estimatedFare"></span></div>
+            $(document).bind('pageinit', function(){
                 
-            </div>
-             -->
-        </div>  
-        
-          
-        
-    </div>
+                tracker.initLocation();
+            });
+            
+            $('#mapView').live('pageshow', function(){
+                tracker.buildMap(tracker.currentGooglePosition);
+                tracker.directionsDisplay.setMap(tracker.map);
+                tracker.renderDirections();
+            });
+        </script>
+    </head> 
+    <body onload="initialize()"> 
     
-        <!-- <div id="map_canvas" style="width: 100%; height: 100%;"></div>  -->
+        <div id="search_page" data-role="page" data-theme="a" >
+        
+            <div data-role="header">
+                <h1>Fair Fare</h1>
+            </div><!-- /header -->
+        
+            <div data-role="content" data-theme="a">   
+                <form action="#mapView" method="post" data-transition="fade">
+                    <fieldset>
+                        <div data-role="fieldcontain">
+                            <label for="origin">From:</label>
+                            <input type="search" name="origin" id="origin" value="" /> 
+                        </div>
+                        
+                        <div data-role="fieldcontain">
+                            <label for="destination">To:</label>
+                            <input type="search" name="destination" id="destination" value="" />
+                        </div>
+                        
+                        <div data-role="fieldcontain">
+                            <label for="start_meter_switch">Start meter:</label>
+                            <select name="start_meter_switch" id="start_meter_switch" data-role="slider">
+                                <option value="off" >Off</option>
+                                <option value="on" selected="selected">On</option>
+                            </select>
+                        </div>
+                        <a href="#mapView" data-role="button" data-transition="fade">Estimate Trip</a>
+                    </fieldset>
+                    
+                </form>
+            </div><!-- /content -->
 
-  </body>
+        </div><!-- /page -->
+        
+        <div id="mapView" data-role="page" data-theme="a" data-add-back-btn="true">
+        
+            <div data-role="header">
+                <h1>Fair Fare</h1>
+            </div><!-- /header -->
+        
+            <div data-role="content" data-theme="a" style="padding: 0px;">   
+                <div id="map_canvas" style="width:320px; height:420px;"></div>
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+    </body>
 </html>
